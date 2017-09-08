@@ -1,0 +1,75 @@
+
+calculation: 
+	  
+         
+          | calculation  expr_en '\n'  { printf(" we are here \n");}
+          | calculation   error        '\n' {yyerrok; printf(" ERREUR SYNTAXE \n");}
+;
+
+;
+
+instruction :  | IDENT { printf("affichage \n"); } 
+                  IDENT '=' expr_en   { printf("affectation \n"); } 
+             
+;
+
+
+
+expr_en  :    operande    { 
+                    $$ = $1 ; 
+               printf("affichage simpe ici  %d \n", $1);
+    
+}                 
+              | operande T_UNION operande { 
+                   $$ = $1 | $3 ;
+                     printf("UNION %d %d %d \n",$1,$3,$$); }
+              | operande T_INTER operande  { printf("intersection  \n");
+                    $$ = $1  | $3 ; }
+              | operande T_DIFF operande { printf("difference \n");
+                 //$$ =Calcul_differnce($1,$3); 
+                                              } 
+              | T_COMPL operande { 
+             printf("complmentaire \n"); 
+             $$ = complementaire($2); }
+
+              | T_CARD operande   { printf("CARDINALE \n");
+                  $$ = Caclul_Cardinal($2); } 
+              |
+              operande '='   operande {
+               printf("affectation  %d  %d \n", $1 , $3);
+                //ici accéder au tableau et enregister la valeur
+              //puis remettre 
+                      //SetValue($1,$3);
+                          }   
+;
+
+
+
+
+operande    : IDENT        { 
+                //printf("identificateur%d \n",$1);
+             //ici accéder au tableau et enregister la valeur
+              //puis remettre 
+                               $$ = $1 ;}        
+              | ensemble  {
+           $$ = $1 ; printf("ensemble  %d \n", $$); }
+;
+ensemble    : '{' '}' { printf("ensemble vide \n");
+                $$ = 0; }                   // ensemble vide 
+              | '{' E_list '}' { 
+                   $$=$2;
+                  printf("liste d'eemtns %d \n", $$); }
+;
+E_list : T_INT	   { 
+
+somme+=$1; 
+        //$$ += somme ;
+//somme =0;
+ printf(" int est %d  \n", $1);
+              }
+     | T_INT ',' E_list { 
+somme+=$1;
+ $$ += somme;
+printf("la somme sera \n", $$);
+//somme = 0;
+}

@@ -1,0 +1,10 @@
+      printf("x est %d \n",x);
+		if((x%2)!=0){
+printf("we are here !! ");
+printf(" i %d \n",i);
+	   if(i==n)
+                  {
+printf(" i == %d \n",i);
+                 result =1;
+                   }
+		            }
